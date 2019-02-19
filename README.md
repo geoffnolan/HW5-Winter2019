@@ -9,7 +9,7 @@ The code reads from the file H5Data.csv.  Be sure to run this source from the di
 
 - Clicking on the link forked this repository to your account on github.  
 - Clone the repository to your local computer.
-- Edit homework5.py.  You can comment out most of the test cases using triple double quotes and then just get one thing working at a time.  Then add the changed file to the staging area and commit the changes.  
+- Edit homework5.py.  You can comment out most of the test cases using triple double quotes and then just get one thing working at a time.  Then add the changed file to the staging area and commit the changes.  You should commit after you get each test case working.  You earn points for up to 3 commits.
 - When you are done with all your changes push back to your github repository.
 - Add the URL to your github repository on Canvas.
 
