@@ -24,7 +24,7 @@ def getData(file):
     lineList = inFile.readlines()
 
     # read the keys from the file and put them in a list
-    line = lineList[0]
+    line = lineList[0:1]
     keyList = line.split(",")
 
     # loop reading the rest of the lines and create a dictionary for each
