@@ -6,71 +6,33 @@ import unittest
 
 
 def getData(file):
-    """ Return a list of dictionary objects from the file
-
-    file - the file name to read from
-    returns - a list of dictionary objects where
-           the keys are from the first row in the data. 
-           There will be a dictionary for each row of values.
-    """
-
-    # create an empty list of dictionary objects
     students = []
-
-    # open the file for reading
     inFile = open(file,"r")
-
-    # read all the lines into a list
     linelist = inFile.readlines()
-
-    # read the keys from the file and put them in a list
+    #read the keys from the file and put them in a list
     line = linelist[0]
     strippy = line.strip("\r\n")
     keyList = strippy.split(",")
-    
-
-        
-    # loop reading the rest of the lines and create a dictionary for each
+    #loop reading the rest of the lines and create a dictionary for each
     for index in range(1,len(linelist)):
         line = linelist[index]
         studentDict = dict() 
         strippy = line.strip("\r\n")
         valueList = line.split(",")
-
         for index in range(len(valueList)):
             key = keyList[index]
             studentDict[key] = valueList[index]
         students.append(studentDict)
-    ##PRINT
-    # close the file
     inFile.close()
 
     return students
 
 def mySort(data,col):
-    """ Return the last name and first name of the first item in a sorted list
-    
-    data -- list of dictionaries
-    col  -- (key) to sort on
-    returns -- the first item in the sorted list as a string of just: firstName lastName
-    """
-
-    #Your code here:
     newList = sorted(data, key = lambda x: x[col])
     firstDict = newList[0]
     return "{} {}".format(firstDict['First'], firstDict['Last'])
 
-
 def classSizes(data):
-    """ Return a sorted tuple of the number of students in each class.
-    
-        data -- list of dictionaries
-        returns -- a list of tuples sorted by the number of students in that class in
-                   descending order
-        [('Senior', 26), ('Junior', 25), ('Freshman', 21), ('Sophomore', 18)]
-        """
-
-    #Your code here:
     classDict = dict()
     for studentDict in data:
         theClass = studentDict['Class']
@@ -80,11 +42,6 @@ def classSizes(data):
 
 
 def findMonth(data):
-    """ Return the most common birth month from this data.
-    
-        data -- list of dictionaries
-        returns --  the month (1-12) that had the most births in the data
-    """
     monthDict = dict()
     for studentDict in data:
         date = studentDict['DOB']
@@ -97,37 +54,16 @@ def findMonth(data):
     return int(first[0])
 
 def calculateAgeFromDOB(dob):
-    """ Return the age in  years from the date of birth.
-
-        dob -- the date of birth month/day/year
-        returns -- the age in years
-    """
-    
     today = date.today()
     dateValues = dob.split("/")
-    
-    # HINT: The three lines below do not contain bugs
     birth = date(int(dateValues[2]),int(dateValues[0]),int(dateValues[1]))
     age = relativedelta(today, birth)
     yearsOld = age.years
-
     return yearsOld
 
-
 def findAge(data):
-    """ Return the rounded average age of the students. 
-    
-        data -- list of dictionaries
-        returns -- the average age of the students and round that age to the nearest 
-                   integer.  You will need to work with the DOB and the current date 
-                   to find the current age in years.
-    """
- 
-
     total = 0
     count = 0
-
-    # loop through the list of dictionaries
     for studentDict in data:
         age = calculateAgeFromDOB(studentDict['DOB'])
         total += age
