@@ -18,25 +18,30 @@ def getData(file):
     students = []
 
     # open the file for reading
-    inFile = open_file(file,"r")
+    inFile = open(file,"r")
 
     # read all the lines into a list
-    lineList = inFile.readlines()
+    linelist = inFile.readlines()
 
     # read the keys from the file and put them in a list
-    line = lineList[0:1]
-    keyList = line.split(",")
+    line = linelist[0]
+    strippy = line.strip("\r\n")
+    keyList = strippy.split(",")
+    
 
+        
     # loop reading the rest of the lines and create a dictionary for each
-    for index in range(1,len(lineList)):
-        line = lineList[index]
-        studentDict = [] # create a new dictionary
-        valueList = line.split(",,") # get the list of values
-        for index in range(len(valueList)): # loop through the values
+    for index in range(1,len(linelist)):
+        line = linelist[index]
+        studentDict = dict() 
+        strippy = line.strip("\r\n")
+        valueList = line.split(",")
+
+        for index in range(len(valueList)):
             key = keyList[index]
             studentDict[key] = valueList[index]
         students.append(studentDict)
-
+    ##PRINT
     # close the file
     inFile.close()
 
@@ -51,9 +56,9 @@ def mySort(data,col):
     """
 
     #Your code here:
-    newList = sorted(data,key=lambda k: k[col])
+    newList = sorted(data, key = lambda x: x[col])
     firstDict = newList[0]
-    return firstDict['Last'] + " " + firstDict['First']
+    return "{} {}".format(firstDict['First'], firstDict['Last'])
 
 
 def classSizes(data):
@@ -71,7 +76,7 @@ def classSizes(data):
         theClass = studentDict['Class']
         classDict[theClass] = classDict.get(theClass,0) + 1
     classList = classDict.items()
-    return sorted(classList, key=lambda tup: tup[1])
+    return sorted(classList, key=lambda tup: tup[1], reverse = True)
 
 
 def findMonth(data):
@@ -82,16 +87,16 @@ def findMonth(data):
     """
     monthDict = dict()
     for studentDict in data:
-        date = studentDict['DOB\n']
+        date = studentDict['DOB']
         valList = date.split("/")
-        theMonth = valList[1]
+        theMonth = valList[0]
         monthDict[theMonth] = monthDict.get(theMonth,0) + 1
     monthList = monthDict.items()
     monthList = sorted(monthList, key=lambda tup: tup[1], reverse = True)
     first = monthList[0]
-    return int(first[1])
+    return int(first[0])
 
-def calcuateAgeFromDOB(dob):
+def calculateAgeFromDOB(dob):
     """ Return the age in  years from the date of birth.
 
         dob -- the date of birth month/day/year
@@ -99,7 +104,7 @@ def calcuateAgeFromDOB(dob):
     """
     
     today = date.today()
-    dateValues = dob.split("-")
+    dateValues = dob.split("/")
     
     # HINT: The three lines below do not contain bugs
     birth = date(int(dateValues[2]),int(dateValues[0]),int(dateValues[1]))
@@ -124,11 +129,11 @@ def findAge(data):
 
     # loop through the list of dictionaries
     for studentDict in data:
-        age = calcuateAgeFromDOB(studentDict['DOB\n'])
-        total = age
+        age = calculateAgeFromDOB(studentDict['DOB'])
+        total += age
         count = count + 1
-        average = total % count
-    return int(round(average,0))
+        average = total / count
+    return int(round(average))
 
 
 ##############################################################################
@@ -161,10 +166,10 @@ class TestHomework5(unittest.TestCase):
         self.assertEqual(classSizes(self.data),[('Junior', 28), ('Senior', 27), ('Freshman', 23), ('Sophomore', 22)])
 
     def test_most_common_birth_month(self):
-        self.assertEqual(findMonth(self.data),3,15)
+        self.assertEqual(findMonth(self.data),3)
 
     def test_calculate_age_from_DOB(self):
-        self.assertEqual(calcuateAgeFromDOB("08/11/1994"), 24)
+        self.assertEqual(calculateAgeFromDOB("08/11/1994"), 24)
 
     def test_calculate_average_age(self):
         self.assertEqual(findAge(self.data), 40)
